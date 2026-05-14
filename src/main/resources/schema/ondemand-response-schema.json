@@ -1,0 +1,73 @@
+{
+    "type": [
+        "object",
+        "array"
+    ],
+    "items": {
+        "type": "object",
+        "properties": {
+            "command_type": {
+                "type": "integer"
+            },
+            "command_value": {
+                "type": "string"
+            },
+            "meter_no": {
+                "type": "string"
+            },
+            "id": {
+                "type": "integer"
+            },
+            "request_id": {
+                "type": "integer"
+            },
+            "status": {
+                "type": "string"
+            },
+            "created_at": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "command_type",
+            "command_value",
+            "meter_no",
+            "id",
+            "request_id",
+            "status",
+            "created_at"
+        ]
+    },
+    "properties": {
+        "command_type": {
+            "type": "integer"
+        },
+        "command_value": {
+            "type": "string"
+        },
+        "meter_no": {
+            "type": "string"
+        },
+        "id": {
+            "type": "integer"
+        },
+        "request_id": {
+            "type": "integer"
+        },
+        "status": {
+            "type": "string"
+        },
+        "created_at": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "command_type",
+        "command_value",
+        "meter_no",
+        "id",
+        "request_id",
+        "status",
+        "created_at"
+    ]
+}

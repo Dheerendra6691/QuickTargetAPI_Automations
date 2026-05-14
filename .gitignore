@@ -1,0 +1,117 @@
+# =========================
+# Build Artifacts
+# =========================
+target/
+out/
+build/
+dist/
+
+# Maven
+.mvn/timing.properties
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+log/
+
+# =========================
+# Test Reports
+# =========================
+reports/
+test-output/
+surefire-reports/
+failsafe-reports/
+
+# =========================
+# Allure Reports
+# =========================
+allure-results/
+allure-report/
+.allure/
+
+# =========================
+# Code Coverage
+# =========================
+jacoco/
+*.exec
+coverage/
+
+# =========================
+# IDE Files
+# =========================
+.vscode/
+.idea/
+*.iml
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# NetBeans
+nbproject/private/
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# Temp Files
+# =========================
+tmp/
+temp/
+*.tmp
+*.swp
+
+# =========================
+# Secrets
+# =========================
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.jks
+
+config/secrets/*
+!config/secrets/.gitkeep
+
+# Optional local config
+*-local.properties
+application-local.yml
+
+# =========================
+# Generated Files
+# =========================
+.github/java-upgrade/
+.api_automations/
+
+# =========================
+# Java binaries
+# =========================
+*.class
+*.jar
+*.war
+*.ear
+
+# =========================
+# Python helper scripts
+# =========================
+__pycache__/
+*.pyc
+
+# =========================
+# Misc
+# =========================
+*.bak
+*.orig
