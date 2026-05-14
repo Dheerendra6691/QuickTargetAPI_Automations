@@ -1,4 +1,4 @@
-package com.restassured.tests.smoke;
+package com.restassured.tests;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;

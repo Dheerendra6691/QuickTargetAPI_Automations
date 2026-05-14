@@ -24,7 +24,9 @@
         <classes>
 
             <class
-                    name="com.restassured.tests.smoke.RequestOnDemandTest"/>
+                    name="com.restassured.tests.RequestOnDemandTest"/>
+            <class
+                    name="com.restassured.tests.TokenApiTest"/>
 
         </classes>
 
