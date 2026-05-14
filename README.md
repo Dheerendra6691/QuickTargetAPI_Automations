@@ -1,22 +1,99 @@
 # EHES API Automation Framework
 
-A production-grade API automation framework engineered for enterprise backend validation, microservices testing, and scalable continuous quality delivery.
+## Overview
 
-This framework has been designed with the same architectural principles used in large-scale distributed systems—focusing on maintainability, extensibility, observability, and parallel execution.
+The EHES API Automation Framework is a production-grade test automation solution designed for validating enterprise backend services, REST APIs, authentication workflows, and business-critical microservices.
 
-It supports authentication workflows, business API validation, data-driven testing, reporting, and is built to integrate seamlessly with CI/CD pipelines.
+This framework has been engineered using enterprise automation principles with a strong focus on:
+
+- Scalability
+- Maintainability
+- Reusability
+- Parallel execution
+- Observability
+- CI/CD readiness
+
+The framework currently validates authentication services, request-on-demand workflows, and API contract behavior, while being architected for future integration with messaging systems, databases, and distributed services.
 
 ---
 
-# System Prerequisites
+## Key Features
 
-Ensure the following are installed:
+### API Validation
 
-- Java 17+
-- Maven 3.9+
-- Python 3.10+
-- Git
-- Allure CLI
+- REST API functional validation
+- Authentication and authorization testing
+- Request/response contract validation
+- Status code verification
+- Schema validation
+- Negative scenario validation
+- Error handling verification
+
+### Enterprise Automation Features
+
+- Parallel test execution
+- Data-driven testing
+- Modular architecture
+- Environment-based configuration
+- Custom listeners
+- Centralized assertions
+- Reusable API clients
+- Failure diagnostics
+- Execution logging
+
+### Reporting and Observability
+
+- Allure reporting integration
+- Request and response traceability
+- Detailed execution logs
+- Test metadata tracking
+- Failure analysis support
+
+---
+
+## Technology Stack
+
+### Core Technologies
+
+- Java 17
+- Maven
+- TestNG
+- Rest Assured
+
+### Reporting
+
+- Allure Reports
+
+### Supporting Libraries
+
+- Jackson
+- Lombok
+- Apache Commons
+
+### Planned Integrations
+
+- RabbitMQ
+- Kafka
+- Redis
+- MQTT
+- PostgreSQL
+- Docker
+- Jenkins
+- GitHub Actions
+
+---
+
+## System Prerequisites
+
+Ensure the following tools are installed before running the framework:
+
+| Component | Version |
+|-----------|---------|
+| Java | 17+ |
+| Maven | 3.9+ |
+| Python | 3.10+ |
+| Git | Latest |
+| Allure CLI | Latest |
 
 Verify installation:
 
@@ -24,72 +101,54 @@ Verify installation:
 java -version
 mvn -version
 python --version
-Local Application Setup
+```
 
-This automation framework validates APIs exposed by a locally running backend service.
+---
 
-Before executing automation suites, start the application locally.
+## Local Application Setup
 
-Start Backend Service
+This framework validates APIs exposed by a locally running backend service.
+
+The backend application must be running before executing automation suites.
+
+### Start Backend Application
+
+Execute the following command:
+
+```bash id="eq71ak"
 python -m uvicorn app.main:app --reload
+```
 
-Once the server is up:
+### Application Endpoints
 
-Application URL:
+| Service | URL |
+|---------|-----|
+| Application | http://127.0.0.1:8000 |
+| Swagger Documentation | http://127.0.0.1:8000/docs |
+| Health Check | http://127.0.0.1:8000/health |
 
-http://127.0.0.1:8000
+---
 
-Swagger Documentation:
+## Project Setup
 
-http://127.0.0.1:8000/docs
+### Clone Repository
 
-Health Check:
+```bash
+git clone <repository-url>
+cd api_automations
+```
 
-http://127.0.0.1:8000/health
-Framework Capabilities
-API Validation
-Authentication workflows
-Token generation and lifecycle validation
-Request-on-demand business flows
-Schema validation
-Status code validation
-Negative scenario validation
-Error contract verification
-Enterprise Testing Features
-Parallel execution
-Data-driven execution
-Environment-based configuration
-Request/response logging
-Custom listeners
-Failure diagnostics
-Retry handling
-Centralized assertions
-Reporting & Observability
-Allure reporting
-Execution logs
-Request/response traceability
-Failure snapshots
-Test metadata tracking
-Technology Stack
-Java 17
-TestNG
-Rest Assured
-Maven
-Allure
-Jackson
-Git
+### Install Dependencies
 
-Framework is designed for future integration with:
+```bash id="91gxsk"
+mvn clean install -DskipTests
+```
 
-RabbitMQ
-Kafka
-Redis
-MQTT
-PostgreSQL
-Docker
-Jenkins
-GitHub Actions
-Project Structure
+---
+
+## Project Structure
+
+```text id="s0rlst"
 api_automations
 │
 ├── src
@@ -97,9 +156,9 @@ api_automations
 │   │   └── java
 │   │       └── com/restassured
 │   │           ├── client
-│   │           ├── models
-│   │           ├── constants
 │   │           ├── config
+│   │           ├── constants
+│   │           ├── models
 │   │           └── utils
 │   │
 │   └── test
@@ -107,76 +166,139 @@ api_automations
 │           └── com/restassured
 │               ├── tests
 │               ├── listeners
-│               ├── dataproviders
-│               └── assertions
+│               ├── assertions
+│               └── dataproviders
 │
 ├── testng.xml
 ├── pom.xml
 └── README.md
-Execution
-Execute Complete Test Suite
+```
+
+---
+
+## Test Execution
+
+### Execute Complete Test Suite
+
+```bash id="zyjlwm"
 mvn clean test
-Execute Specific Test Suite
+```
+
+### Execute TestNG Suite
+
+```bash id="w8jxw7"
 mvn clean test -DsuiteXmlFile=testng.xml
-Execute Individual Test Class
+```
+
+### Execute Individual Test Class
+
+```bash id="x04v0w"
 mvn test -Dtest=TokenApiTest
-Reporting
+```
 
-Generate interactive Allure report:
+### Execute Individual Test Method
 
+```bash id="x1zrxs"
+mvn test -Dtest=TokenApiTest#verifyTokenGeneration
+```
+
+---
+
+## Reporting
+
+### Generate Allure Report
+
+Execute:
+
+```bash id="j6x1ts"
 allure serve target/allure-results
-Current Test Coverage
-Authentication Module
-Valid credentials
-Invalid credentials
-Empty payload validation
-Security validation
-Token generation verification
-Request On Demand Module
-Valid request submission
-Business payload validation
-Unauthorized access validation
-Invalid contract handling
-Response contract verification
-Framework Design Principles
+```
 
-This framework follows:
+The report includes:
 
-Scalability
+- Execution summary
+- Test history
+- Failure diagnostics
+- Request/response details
+- Execution trends
 
-Supports enterprise-level suite expansion with modular service abstraction.
+---
 
-Maintainability
+## Current Test Coverage
 
-Encapsulated client layers and reusable utilities minimize duplication.
+### Authentication Module
 
-Reliability
+#### Token API Validation
 
-Deterministic validations, centralized assertions, and failure diagnostics.
+- Valid credential validation
+- Invalid username validation
+- Invalid password validation
+- Empty username validation
+- Empty password validation
+- Empty payload validation
 
-Extensibility
+### Request On Demand Module
 
-Designed for seamless integration with messaging systems, databases, and distributed workflows.
+#### Business Workflow Validation
 
-CI/CD Readiness
+- Valid request submission
+- Invalid request validation
+- Authorization validation
+- Response contract validation
+- Error handling validation
 
-Compatible with modern DevOps pipelines and distributed execution agents.
+---
 
-Roadmap
+## Framework Design Principles
 
-Upcoming integrations:
+### Scalability
 
-Database validation layer
-Kafka event validation
-RabbitMQ message assertions
-MQTT workflow testing
-Dockerized execution
-Distributed test execution
-Performance hooks
-Contract testing
-Author
+Designed to support large enterprise automation suites with modular expansion.
 
-Dheerendra Vishwakarma
+### Maintainability
+
+Reusable components and abstraction layers reduce duplication and improve long-term maintainability.
+
+### Reliability
+
+Deterministic assertions, logging, and diagnostics ensure consistent execution.
+
+### Extensibility
+
+Supports seamless integration with distributed systems, databases, and event-driven architectures.
+
+### CI/CD Readiness
+
+Optimized for Jenkins, GitHub Actions, Docker, and distributed execution pipelines.
+
+---
+
+## Future Enhancements
+
+### Planned Capabilities
+
+- Database validation layer
+- RabbitMQ message validation
+- Kafka event validation
+- MQTT workflow automation
+- Dockerized execution
+- Distributed test execution
+- Contract testing
+- Performance validation
+
+---
+
+## Author
+
+### Dheerendra Vishwakarma
 
 Senior QA Automation Engineer
-API Automation | Distributed Systems | Messaging Platforms | Enterprise Quality Engineering
+
+Specializations:
+
+- API Automation
+- Backend Validation
+- Messaging Systems
+- Distributed Systems Testing
+- Enterprise Test Architecture
+- CI/CD Quality Engineering
