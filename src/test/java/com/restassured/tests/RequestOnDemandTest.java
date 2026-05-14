@@ -14,7 +14,8 @@ import io.restassured.response.Response;
 
 public class RequestOnDemandTest extends BaseTest {
 
-    @Test(dataProvider = "positiveData", description = "Verify Request On Demand API")
+    @Test(dataProvider = "positiveData", description = "Verify Request On Demand API", groups = { "api", "smoke",
+            "regression" })
     public void verifyRequestOnDemand(OnDemandRequest request) {
 
         Response response = new BaseService().get(ApiEndpoints.REQUEST_ON_DEMAND, request);
@@ -42,7 +43,7 @@ public class RequestOnDemandTest extends BaseTest {
         };
     }
 
-    @Test(dataProvider = "negativeData")
+    @Test(dataProvider = "negativeData", groups = { "api", "regression" })
     public void verifyNegativeRequestOnDemand(OnDemandRequest request, int expectedStatusCode) {
 
         Response response = new BaseService().get(ApiEndpoints.REQUEST_ON_DEMAND, request);

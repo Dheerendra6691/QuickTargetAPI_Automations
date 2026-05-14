@@ -20,6 +20,11 @@
 
     <test
             name="Smoke_Tests">
+            <groups>
+                <run>
+                    <include name="regression"/>
+                </run>
+            </groups>
 
         <classes>
 

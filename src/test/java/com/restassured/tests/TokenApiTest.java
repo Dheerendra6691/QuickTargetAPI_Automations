@@ -21,7 +21,7 @@ public class TokenApiTest {
         };
     }
 
-    @Test(dataProvider = "tokenData", description = "Verify token API")
+    @Test(dataProvider = "tokenData", description = "Verify token API", groups = { "api", "regression" })
     public void verifyTokenGeneration(String username, String password, boolean shouldPass) {
 
         AuthService authService = new AuthService();
