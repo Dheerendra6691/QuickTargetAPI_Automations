@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite
-        name="EHES_API_Automation_Suite"
-        verbose="1"
-        parallel="methods"
-        thread-count="5">
+<suite name="EHES_API_Automation_Suite"
+       verbose="1"
+       parallel="methods"
+       thread-count="5">
 
     <listeners>
-
-        <listener
-                class-name="com.restassured.listeners.TestListener"/>
-
-        <listener
-                class-name="io.qameta.allure.testng.AllureTestNg"/>
-
+        <listener class-name="com.restassured.listeners.TestListener"/>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
     </listeners>
 
-    <test
-            name="Smoke_Tests">
-            <groups>
-                <run>
-                    <include name="regression"/>
-                </run>
-            </groups>
+    <test name="Smoke_Tests">
+
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
 
         <classes>
 
-            <class
-                    name="com.restassured.tests.RequestOnDemandTest"/>
-            <class
-                    name="com.restassured.tests.TokenApiTest"/>
-
+            <class name="com.restassured.tests.RequestOnDemandTest">
+               
+            </class>
+                <class name="com.restassured.tests.TokenApiTest">
+                    <methods>
+                        <include name="shouldGenerateTokenWhenCredentialsAreValid"/>
+                        <include name="shouldFailTokenGenerationWhenCredentialsAreInvalid"/>
+                        <exclude name="shouldFailTokenGenerationWhenCredentialsValidUserAndInvalidPass"/>
+                    </methods>
+                </class>
         </classes>
 
     </test>

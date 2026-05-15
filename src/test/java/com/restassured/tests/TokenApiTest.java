@@ -8,35 +8,46 @@ import com.restassured.client.AuthService;
 
 public class TokenApiTest {
 
-    @DataProvider(name = "tokenData")
-    public Object[][] tokenData() {
+    private final AuthService authService = new AuthService();
 
-        return new Object[][] {
-                { "vikas", "Vikas@123", true },
-                { "invalid", "Vikas@123", false },
-                { "vikas", "wrong", false },
-                { "", "Vikas@123", false },
-                { "vikas", "", false },
-                { "", "", false }
-        };
+    @Test(description = "Verify valid token generation", groups = { "sanity", "regression"
+    })
+
+    public void shouldGenerateTokenWhenCredentialsAreValid() {
+        String token = authService.generateToken("vikas", "Vikas@123");
+        Assert.assertNotNull(token);
+        Assert.assertFalse(token.isBlank());
     }
 
-    @Test(dataProvider = "tokenData", description = "Verify token API", groups = { "api", "regression" })
-    public void verifyTokenGeneration(String username, String password, boolean shouldPass) {
+    @Test(groups = { "regression", "smoke" })
 
-        AuthService authService = new AuthService();
-
+    public void shouldFailTokenGenerationWhenCredentialsValidUserAndInvalidPass() {
         try {
-
-            String token = authService.generateToken(username, password);
-
-            Assert.assertTrue(shouldPass);
-            Assert.assertNotNull(token);
-            Assert.assertFalse(token.isBlank());
-
+            authService.generateToken("vikas", "Wrong@34");
+            Assert.fail("Token should not be generated");
         } catch (RuntimeException e) {
+            Assert.assertTrue(true);
+        }
+    }
 
-            Assert.assertFalse(shouldPass);
+    @DataProvider(name = "invalidTokenData")
+    public Object[][] invalidTokenData() {
+        return new Object[][] {
+                { "invalid", "Vikas@123" },
+                { "vikas", "Wrong@34" },
+                { "", "Vikas@123" },
+                { "vikas", "" },
+                { "", "" } };
+    }
+
+    @Test(dataProvider = "invalidTokenData", description = "Verify invalid token generation", groups = {
+            "regression", "smoke" })
+    public void shouldFailTokenGenerationWhenCredentialsAreInvalid(String username, String password) {
+        try {
+            authService.generateToken(username, password);
+            Assert.fail("Token should not be generated");
+        } catch (RuntimeException e) {
+            Assert.assertTrue(true);
         }
     }
 }

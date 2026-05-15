@@ -15,7 +15,7 @@ public final class ResponseSpecs {
         return new ResponseSpecBuilder()
                 .expectStatusCode(200)
                 .expectContentType(ContentType.JSON)
-                .expectResponseTime(lessThan(5000L))
+                .expectResponseTime(lessThan(5000L)) // Rest Assured’s responseTime() returns a long, not an int.
                 .build();
     }
 

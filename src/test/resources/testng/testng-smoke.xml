@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="EHES_Smoke_Suite"
+       verbose="1"
+       parallel="methods"
+       thread-count="5">
+
+    <listeners>
+        <listener class-name="com.restassured.listeners.TestListener"/>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
+
+    <test name="Smoke_Tests">
+
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+
+        <packages>
+            <package name="com.restassured.tests"/>
+        </packages>
+
+    </test>
+
+</suite>
