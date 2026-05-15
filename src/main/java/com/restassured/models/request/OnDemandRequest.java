@@ -30,6 +30,12 @@ public class OnDemandRequest {
         return command_value;
     }
 
+    @Override
+    public String toString() {
+        return "OnDemandRequest [request_id=" + request_id + ", meter_no=" + meter_no + ", command_type=" + command_type
+                + ", command_value=" + command_value + "]";
+    }
+
     // Builder class help to assign value in any order
     public static class Builder {
 
