@@ -18,6 +18,25 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
+    services:
+
+      postgres:
+        image: postgres:16
+
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: Dry@6691
+          POSTGRES_DB: quick_db
+
+        ports:
+          - 5432:5432
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
     concurrency:
       group: smoke-tests
       cancel-in-progress: true
@@ -47,6 +66,7 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
+
       - name: Install API Dependencies
         working-directory: HES_API
         run: |
@@ -55,12 +75,69 @@ jobs:
 
 
       ######################################################################
+      # Database Verification
+      ######################################################################
+
+      - name: Verify PostgreSQL
+        env:
+          PGPASSWORD: Dry@6691
+        run: |
+
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+          pg_isready \
+            -h 127.0.0.1 \
+            -p 5432 \
+            -U postgres
+
+          psql \
+            -h 127.0.0.1 \
+            -U postgres \
+            -d quick_db \
+            -c "SELECT version();"
+
+
+      ######################################################################
+      # FastAPI Import Validation
+      ######################################################################
+
+      - name: Validate FastAPI Import
+        working-directory: HES_API
+        env:
+          DATABASE_URL: postgresql://postgres:Dry%406691@127.0.0.1:5432/quick_db
+        run: |
+
+          python -c "
+from app.main import app
+print('FastAPI import successful')
+"
+
+
+      ######################################################################
+      # Optional Migration
+      ######################################################################
+      # Uncomment if you use Alembic
+      #
+      # - name: Run DB Migration
+      #   working-directory: HES_API
+      #   env:
+      #     DATABASE_URL: postgresql://postgres:Dry%406691@127.0.0.1:5432/quick_db
+      #   run: |
+      #     alembic upgrade head
+
+
+      ######################################################################
       # Start API
       ######################################################################
 
       - name: Start FastAPI Server
         working-directory: HES_API
+        env:
+          DATABASE_URL: postgresql://postgres:Dry%406691@127.0.0.1:5432/quick_db
+
         run: |
+
           nohup python -m uvicorn app.main:app \
             --host 127.0.0.1 \
             --port 8000 \
@@ -70,10 +147,10 @@ jobs:
 
           sleep 5
 
-          echo "Running Processes:"
+          echo "========= PROCESS ========="
           ps -ef | grep uvicorn || true
 
-          echo "Initial API Logs:"
+          echo "========= LOG ========="
           cat api.log || true
 
 
@@ -95,21 +172,17 @@ jobs:
               exit 0
             fi
 
-            echo "Waiting for API..."
+            echo "Waiting..."
+
+            cat HES_API/api.log || true
+
             sleep 2
 
           done
 
-          echo "API failed to start"
+          echo "API failed"
 
-          echo "========= API LOG ========="
           cat HES_API/api.log || true
-
-          echo "========= PROCESS ========="
-          ps -ef | grep uvicorn || true
-
-          echo "========= PORT ========="
-          netstat -tulpn | grep 8000 || true
 
           exit 1
 
@@ -136,7 +209,7 @@ jobs:
 
 
       ######################################################################
-      # Execute Tests
+      # Test Execution
       ######################################################################
 
       - name: Run Smoke Tests
@@ -175,7 +248,7 @@ jobs:
 
 
       ######################################################################
-      # Upload Artifacts
+      # Upload Reports
       ######################################################################
 
       - name: Upload Reports
