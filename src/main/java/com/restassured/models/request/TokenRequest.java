@@ -20,8 +20,7 @@ public class TokenRequest {
 
     @Override
     public String toString() {
-        return "TokenRequest [username=" + username +
-                ", password=" + password + "]";
+        return "TokenRequest [username=" + username + ", password=" + password + "]";
     }
 
     public static class Builder {

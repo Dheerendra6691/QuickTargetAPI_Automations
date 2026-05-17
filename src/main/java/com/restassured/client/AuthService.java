@@ -4,7 +4,11 @@ import com.restassured.constants.ApiEndpoints;
 import com.restassured.models.request.TokenRequest;
 
 import io.restassured.response.Response;
-
+/*
+Handles authentication-related API calls such as token generation.
+Provides authenticated access for secured endpoints.
+Helps centralize auth logic and simplifies token reuse across test cases.
+*/
 public class AuthService extends BaseService {
 
     public String generateToken(String username, String password) {

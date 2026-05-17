@@ -4,7 +4,11 @@ import static io.restassured.RestAssured.given;
 
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
-
+/*
+Defines reusable request specifications like headers and content types.
+Standardizes request building.
+Helps reduce repeated setup code in API tests.
+*/
 public final class RequestSpecs {
 
     private static final String BASE_URL = "http://127.0.0.1:8000";
@@ -13,18 +17,14 @@ public final class RequestSpecs {
     }
 
     public static RequestSpecification defaultSpec() {
-        return given()
-                .baseUri(BASE_URL)
-                .contentType(ContentType.JSON);
+        return given().baseUri(BASE_URL).contentType(ContentType.JSON);
     }
 
     public static RequestSpecification authorized(String token) {
-        return defaultSpec()
-                .header("Authorization", "Bearer " + token);
+        return defaultSpec().header("Authorization", "Bearer " + token);
     }
 
     public static RequestSpecification formUrlEncoded() {
-        return defaultSpec()
-                .contentType(ContentType.URLENC);
+        return defaultSpec().contentType(ContentType.URLENC);
     }
 }

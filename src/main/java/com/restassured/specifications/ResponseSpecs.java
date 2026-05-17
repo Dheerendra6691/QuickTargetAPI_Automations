@@ -5,7 +5,11 @@ import static org.hamcrest.Matchers.lessThan;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.ResponseSpecification;
-
+/*
+Defines expected response specifications such as status codes and response times.
+Standardizes validations.
+Helps maintain consistent response verification.
+*/
 public final class ResponseSpecs {
 
     private ResponseSpecs() {
@@ -24,4 +28,5 @@ public final class ResponseSpecs {
                 .expectStatusCode(statusCode)
                 .build();
     }
+
 }

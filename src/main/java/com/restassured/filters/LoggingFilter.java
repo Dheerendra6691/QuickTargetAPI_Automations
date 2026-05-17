@@ -9,78 +9,76 @@ import io.restassured.response.Response;
 import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.FilterableResponseSpecification;
 
+/* 
+Logs request and response details automatically. 
+Captures headers, payloads, and status codes. 
+Helps debugging failed API executions efficiently.
+*/
 public class LoggingFilter implements Filter {
 
-    private static final Logger LOGGER = LogManager.getLogger(
-            LoggingFilter.class);
+        private static final Logger LOGGER = LogManager.getLogger(
+                        LoggingFilter.class);
 
-    @Override
-    public Response filter(
-            FilterableRequestSpecification requestSpec,
-            FilterableResponseSpecification responseSpec,
-            FilterContext context) {
+        @Override
+        public Response filter(
+                        FilterableRequestSpecification requestSpec,
+                        FilterableResponseSpecification responseSpec,
+                        FilterContext context) {
 
-        logRequest(
-                requestSpec);
+                logRequest(requestSpec);
 
-        Response response = context.next(
-                requestSpec,
-                responseSpec);
+                Response response = context.next(requestSpec, responseSpec);
 
-        logResponse(
-                response);
+                logResponse(response);
 
-        return response;
-    }
-
-    private void logRequest(
-            FilterableRequestSpecification requestSpec) {
-
-        LOGGER.info(
-                "Method : {}",
-                requestSpec.getMethod());
-
-        LOGGER.info(
-                "URI : {}",
-                requestSpec.getURI());
-
-        LOGGER.info(
-                "Headers : {}",
-                requestSpec.getHeaders());
-
-        if (!requestSpec.getQueryParams().isEmpty()) {
-
-            LOGGER.info(
-                    "Query Params : {}",
-                    requestSpec.getQueryParams());
+                return response;
         }
 
-        if (!requestSpec.getFormParams().isEmpty()) {
+        private void logRequest(FilterableRequestSpecification requestSpec) {
 
-            LOGGER.info(
-                    "Form Params : {}",
-                    requestSpec.getFormParams());
+                LOGGER.info("Method : {}", requestSpec.getMethod());
+
+                LOGGER.info(
+                                "URI : {}",
+                                requestSpec.getURI());
+
+                LOGGER.info(
+                                "Headers : {}",
+                                requestSpec.getHeaders());
+
+                if (!requestSpec.getQueryParams().isEmpty()) {
+
+                        LOGGER.info(
+                                        "Query Params : {}",
+                                        requestSpec.getQueryParams());
+                }
+
+                if (!requestSpec.getFormParams().isEmpty()) {
+
+                        LOGGER.info(
+                                        "Form Params : {}",
+                                        requestSpec.getFormParams());
+                }
+
+                Object body = requestSpec.getBody();
+
+                if (body != null) {
+
+                        LOGGER.info(
+                                        "Body : {}",
+                                        body);
+                }
         }
 
-        Object body = requestSpec.getBody();
+        private void logResponse(
+                        Response response) {
 
-        if (body != null) {
+                LOGGER.info(
+                                "Status Code : {}",
+                                response.statusCode());
 
-            LOGGER.info(
-                    "Body : {}",
-                    body);
+                LOGGER.info(
+                                "Response : {}",
+                                response.asPrettyString());
         }
-    }
-
-    private void logResponse(
-            Response response) {
-
-        LOGGER.info(
-                "Status Code : {}",
-                response.statusCode());
-
-        LOGGER.info(
-                "Response : {}",
-                response.asPrettyString());
-    }
 }

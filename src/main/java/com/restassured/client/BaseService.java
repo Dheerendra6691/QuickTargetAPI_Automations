@@ -9,6 +9,11 @@ import com.restassured.specifications.RequestSpecs;
 import io.restassured.response.Response;
 import io.restassured.specification.ResponseSpecification;
 
+/* 
+Base parent service for all API classes. 
+Manages common request setup, headers, base URI, and reusable configurations. 
+Helps avoid duplicate code and keeps API test implementation consistent.
+*/
 public class BaseService {
 
     protected static String authToken;

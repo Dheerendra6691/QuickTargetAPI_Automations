@@ -10,7 +10,11 @@ import com.restassured.filters.LoggingFilter;
 import com.restassured.listeners.TestListener;
 
 import io.restassured.RestAssured;
-
+/*
+Base test setup class for all API tests.
+Initializes configurations, contexts, and dependencies.
+Helps standardize test execution lifecycle.
+*/
 @Listeners({ TestListener.class, io.qameta.allure.testng.AllureTestNg.class })
 public class BaseTest {
 
