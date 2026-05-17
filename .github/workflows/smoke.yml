@@ -12,6 +12,7 @@ env:
   TEST_ENV: qa
 
 jobs:
+
   smoke-tests:
 
     runs-on: ubuntu-latest
@@ -23,9 +24,12 @@ jobs:
 
     steps:
 
+      ######################################################################
+      # Checkout
+      ######################################################################
+
       - name: Checkout Automation Repository
         uses: actions/checkout@v4
-
 
       - name: Checkout API Repository
         uses: actions/checkout@v4
@@ -34,33 +38,85 @@ jobs:
           path: HES_API
 
 
+      ######################################################################
+      # Python Setup
+      ######################################################################
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-
       - name: Install API Dependencies
+        working-directory: HES_API
         run: |
-          cd HES_API
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
 
+      ######################################################################
+      # Start API
+      ######################################################################
+
       - name: Start FastAPI Server
+        working-directory: HES_API
         run: |
-          cd HES_API
-          nohup python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 > api.log 2>&1 &
+          nohup python -m uvicorn app.main:app \
+            --host 127.0.0.1 \
+            --port 8000 \
+            > api.log 2>&1 &
+
+          echo "API_PID=$!"
+
+          sleep 5
+
+          echo "Running Processes:"
+          ps -ef | grep uvicorn || true
+
+          echo "Initial API Logs:"
+          cat api.log || true
 
 
-      - name: Wait for API Startup
-        run: sleep 20
+      ######################################################################
+      # Health Check
+      ######################################################################
 
-
-      - name: Verify API is Running
+      - name: Wait For API Startup
         run: |
-          curl http://127.0.0.1:8000/docs
 
+          for i in {1..30}
+          do
+
+            echo "Attempt: $i"
+
+            if curl -f http://127.0.0.1:8000/docs
+            then
+              echo "API started successfully"
+              exit 0
+            fi
+
+            echo "Waiting for API..."
+            sleep 2
+
+          done
+
+          echo "API failed to start"
+
+          echo "========= API LOG ========="
+          cat HES_API/api.log || true
+
+          echo "========= PROCESS ========="
+          ps -ef | grep uvicorn || true
+
+          echo "========= PORT ========="
+          netstat -tulpn | grep 8000 || true
+
+          exit 1
+
+
+      ######################################################################
+      # Java Setup
+      ######################################################################
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -70,21 +126,57 @@ jobs:
           cache: maven
 
 
-      - name: Verify Build
-        run: mvn clean compile -DskipTests
+      ######################################################################
+      # Build
+      ######################################################################
 
+      - name: Verify Build
+        run: |
+          mvn clean compile -DskipTests
+
+
+      ######################################################################
+      # Execute Tests
+      ######################################################################
 
       - name: Run Smoke Tests
-        run: >
-          mvn test
-          -DsuiteXmlFile=src/test/resources/testng/testng-smoke.xml
-          -Denv=${{ env.TEST_ENV }}
+        run: |
+          mvn test \
+            -DsuiteXmlFile=src/test/resources/testng/testng-smoke.xml \
+            -Denv=${{ env.TEST_ENV }}
 
+
+      ######################################################################
+      # Reporting
+      ######################################################################
 
       - name: Generate Allure Report
         if: always()
-        run: mvn allure:report
+        run: |
+          mvn allure:report
 
+
+      ######################################################################
+      # Diagnostics
+      ######################################################################
+
+      - name: Collect Runtime Diagnostics
+        if: always()
+        run: |
+
+          echo "========= API PROCESS ========="
+          ps -ef | grep uvicorn || true
+
+          echo "========= PORT ========="
+          netstat -tulpn | grep 8000 || true
+
+          echo "========= API LOG ========="
+          cat HES_API/api.log || true
+
+
+      ######################################################################
+      # Upload Artifacts
+      ######################################################################
 
       - name: Upload Reports
         if: always()
