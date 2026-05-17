@@ -1,0 +1,71 @@
+name: API Smoke Tests
+
+on:
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+
+env:
+
+  JAVA_VERSION: 17
+  TEST_ENV: qa
+
+
+jobs:
+
+  smoke-tests:
+
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 30
+
+    concurrency:
+      group: smoke-tests
+      cancel-in-progress: true
+
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven
+
+
+      - name: Verify Build
+        run: mvn clean compile -DskipTests
+
+
+      - name: Run Smoke Tests
+        run: >
+          mvn test
+          -DsuiteXmlFile=src/test/resources/testng/testng-smoke.xml
+          -Denv=${{ env.TEST_ENV }}
+
+
+      - name: Generate Allure Report
+        if: always()
+        run: mvn allure:report
+
+
+      - name: Upload Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-report
+          retention-days: 15
+          path: |
+            target/allure-results
+            target/site/allure-maven-plugin
+            target/surefire-reports
+            logs
