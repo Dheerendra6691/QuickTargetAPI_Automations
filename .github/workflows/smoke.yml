@@ -89,7 +89,7 @@ jobs:
 
 
       ######################################################################
-      # Validate FastAPI Import
+      # Validate Import
       ######################################################################
 
       - name: Validate FastAPI Import
@@ -101,6 +101,18 @@ jobs:
 
 
       ######################################################################
+      # Create DB Schema
+      ######################################################################
+
+      - name: Create Database Schema
+        working-directory: HES_API
+        env:
+          DATABASE_URL: postgresql://postgres:Dry%406691@127.0.0.1:5432/quick_db
+        run: |
+          python -c "from app.db.base import Base; from app.db.session import engine; Base.metadata.create_all(bind=engine); print('Schema created successfully')"
+
+
+      ######################################################################
       # Start API
       ######################################################################
 
@@ -109,11 +121,12 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:Dry%406691@127.0.0.1:5432/quick_db
         run: |
-          nohup python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 > api.log 2>&1 &
+          nohup python -m uvicorn app.main:app \
+            --host 127.0.0.1 \
+            --port 8000 > api.log 2>&1 &
 
           sleep 5
 
-          echo "========= API LOG ========="
           cat api.log || true
 
 
@@ -134,17 +147,11 @@ jobs:
               exit 0
             fi
 
-            echo "Waiting for API..."
-
             cat HES_API/api.log || true
 
             sleep 2
 
           done
-
-          echo "API failed"
-
-          cat HES_API/api.log || true
 
           exit 1
 
@@ -189,23 +196,6 @@ jobs:
         if: always()
         run: |
           mvn allure:report
-
-
-      ######################################################################
-      # Diagnostics
-      ######################################################################
-
-      - name: Collect Runtime Diagnostics
-        if: always()
-        run: |
-          echo "========= API PROCESS ========="
-          ps -ef | grep uvicorn || true
-
-          echo "========= PORT ========="
-          netstat -tulpn | grep 8000 || true
-
-          echo "========= API LOG ========="
-          cat HES_API/api.log || true
 
 
       ######################################################################
