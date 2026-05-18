@@ -26,8 +26,7 @@ public class CommandWorkflow {
 
         private final BaseService service = new BaseService();
 
-        public List<RequestOnDemandResponse> executeOnDemand(
-                        OnDemandRequest request) {
+        public List<RequestOnDemandResponse> executeOnDemand(OnDemandRequest request) {
 
                 Response response = service.get(
                                 ApiEndpoints.REQUEST_ON_DEMAND,
@@ -38,18 +37,16 @@ public class CommandWorkflow {
 
                 SchemaValidator.validate(response, "ondemand");
 
-                List<RequestOnDemandResponse> commands = Arrays.asList(
+                List<RequestOnDemandResponse> responseODR = Arrays.asList(
                                 response.as(RequestOnDemandResponse[].class));
 
-                Assert.assertFalse(commands.isEmpty(), "API response should not be empty");
+                Assert.assertFalse(responseODR.isEmpty(), "API response should not be empty");
 
-                for (RequestOnDemandResponse command : commands) {
+                for (RequestOnDemandResponse responseData : responseODR) {
 
-                        ScenarioContext.set("requestId", command.getRequestId());
-
-                        ScenarioContext.set("meterNo", command.getMeterNo());
-
-                        ScenarioContext.set("status", command.getStatus());
+                        ScenarioContext.put("requestId", responseData.getRequestId());
+                        ScenarioContext.put("meterNo", responseData.getMeterNo());
+                        ScenarioContext.put("status", responseData.getStatus());
 
                         if (ConfigManager.getBoolean("db.validation.enabled")) {
 
@@ -57,7 +54,7 @@ public class CommandWorkflow {
                         }
                 }
 
-                return commands;
+                return responseODR;
         }
 
         public void executeNegativeOnDemand(OnDemandRequest request, int expectedStatusCode) {

@@ -16,7 +16,7 @@ request generation across API automation.
 
 public final class JacksonSerializer {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper objMapper = new ObjectMapper();
 
     private JacksonSerializer() {
     }
@@ -24,7 +24,7 @@ public final class JacksonSerializer {
     public static String serialize(Object object) {
 
         try {
-            return MAPPER.writeValueAsString(object);
+            return objMapper.writeValueAsString(object);
         } catch (Exception exception) {
             throw new RuntimeException("Serialization failed", exception);
         }

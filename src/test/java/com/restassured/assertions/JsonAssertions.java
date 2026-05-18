@@ -9,22 +9,11 @@ public final class JsonAssertions {
     private JsonAssertions() {
     }
 
-    public static void assertFieldExists(
-            JsonPath jsonPath,
-            String field) {
-
-        Assert.assertNotNull(
-                jsonPath.get(field),
-                "Missing field : " + field);
+    public static void assertFieldExists(JsonPath jsonPath, String field) {
+        Assert.assertNotNull(jsonPath.get(field), "Missing field : " + field);
     }
 
-    public static void assertFieldEquals(
-            JsonPath jsonPath,
-            String field,
-            Object expected) {
-
-        Assert.assertEquals(
-                jsonPath.get(field),
-                expected);
+    public static void assertFieldEquals(JsonPath jsonPath, String field, Object expected) {
+        Assert.assertEquals(jsonPath.get(field), expected);
     }
 }

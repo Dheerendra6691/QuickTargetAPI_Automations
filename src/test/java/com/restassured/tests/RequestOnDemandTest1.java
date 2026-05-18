@@ -26,9 +26,9 @@ public class RequestOnDemandTest1 extends BaseTest {
 
     public void verifyRequestOnDemand(OnDemandRequest request) {
 
-        List<RequestOnDemandResponse> commands = commandWorkflow.executeOnDemand(request);
+        List<RequestOnDemandResponse> responseODR = commandWorkflow.executeOnDemand(request);
 
-        ApiAssertions.assertOnDemandResponse(commands);
+        ApiAssertions.assertOnDemandResponse(responseODR);
     }
 
     @Test(dataProvider = "negativeOnDemandData", dataProviderClass = OnDemandDataProvider.class, description = "Verify negative Request On Demand API", groups = {

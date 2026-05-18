@@ -10,16 +10,19 @@ Helps validate structured API responses efficiently.
 
 public final class JacksonDeserializer {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper objMapper = new ObjectMapper();
 
     private JacksonDeserializer() {
     }
 
+    // <T> declares a generic type parameter. T-User or Employee
+    // T = generic return type (User, Employee, etc.)
+    // clazz = runtime class info (User.class, Employee.class)
     public static <T> T deserialize(String json, Class<T> clazz) {
 
         try {
 
-            return MAPPER.readValue(json, clazz);
+            return objMapper.readValue(json, clazz);
 
         } catch (Exception exception) {
 
