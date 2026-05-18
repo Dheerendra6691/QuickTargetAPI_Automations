@@ -1,6 +1,11 @@
 package com.restassured.models.request;
 
-public class TokenRequest {
+/*
+ * Immutable request POJO for authentication/token generation API payload.
+ * Implemented using Builder Pattern for clean object creation with
+ * mandatory field validation.
+ */
+public final class TokenRequest {
 
     private final String username;
     private final String password;
@@ -8,6 +13,10 @@ public class TokenRequest {
     private TokenRequest(Builder builder) {
         this.username = builder.username;
         this.password = builder.password;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public String getUsername() {
@@ -20,10 +29,11 @@ public class TokenRequest {
 
     @Override
     public String toString() {
-        return "TokenRequest [username=" + username + ", password=" + password + "]";
+        return "TokenRequest [username=" + username
+                + ", password=******]";
     }
 
-    public static class Builder {
+    public static final class Builder {
 
         private String username;
         private String password;
@@ -40,12 +50,16 @@ public class TokenRequest {
 
         public TokenRequest build() {
 
-            if (username == null || password == null) {
+            if (isBlank(username) || isBlank(password)) {
                 throw new IllegalArgumentException(
-                        "username/password required");
+                        "Username and password must not be null or blank");
             }
 
             return new TokenRequest(this);
+        }
+
+        private boolean isBlank(String value) {
+            return value == null || value.trim().isEmpty();
         }
     }
 }

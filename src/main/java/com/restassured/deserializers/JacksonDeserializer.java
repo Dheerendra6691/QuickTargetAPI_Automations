@@ -15,15 +15,11 @@ public final class JacksonDeserializer {
     private JacksonDeserializer() {
     }
 
-    public static <T> T deserialize(
-            String json,
-            Class<T> clazz) {
+    public static <T> T deserialize(String json, Class<T> clazz) {
 
         try {
 
-            return MAPPER.readValue(
-                    json,
-                    clazz);
+            return MAPPER.readValue(json, clazz);
 
         } catch (Exception exception) {
 

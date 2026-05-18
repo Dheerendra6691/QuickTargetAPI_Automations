@@ -4,6 +4,7 @@ import com.restassured.constants.ApiEndpoints;
 import com.restassured.models.request.TokenRequest;
 
 import io.restassured.response.Response;
+
 /*
 Handles authentication-related API calls such as token generation.
 Provides authenticated access for secured endpoints.
@@ -19,8 +20,6 @@ public class AuthService extends BaseService {
                 .build();
 
         Response response = postForm(ApiEndpoints.TOKEN, request);
-
-        response.prettyPrint();
 
         if (response.statusCode() != 200) {
             throw new RuntimeException(response.asPrettyString());

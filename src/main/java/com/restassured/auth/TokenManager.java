@@ -30,7 +30,7 @@ public final class TokenManager {
         return token;
     }
 
-    public static void invalidate() {
+    public static synchronized void invalidate() {
 
         token = null;
     }

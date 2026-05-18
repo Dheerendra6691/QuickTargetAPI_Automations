@@ -34,20 +34,14 @@ public class CommandWorkflow {
                                 request,
                                 ResponseSpecs.success());
 
-                Assert.assertNotNull(
-                                response,
-                                "API response should not be null");
+                Assert.assertNotNull(response, "API response should not be null");
 
-                SchemaValidator.validate(
-                                response,
-                                "ondemand");
+                SchemaValidator.validate(response, "ondemand");
 
                 List<RequestOnDemandResponse> commands = Arrays.asList(
                                 response.as(RequestOnDemandResponse[].class));
 
-                Assert.assertFalse(
-                                commands.isEmpty(),
-                                "API response should not be empty");
+                Assert.assertFalse(commands.isEmpty(), "API response should not be empty");
 
                 for (RequestOnDemandResponse command : commands) {
 
@@ -66,9 +60,7 @@ public class CommandWorkflow {
                 return commands;
         }
 
-        public void executeNegativeOnDemand(
-                        OnDemandRequest request,
-                        int expectedStatusCode) {
+        public void executeNegativeOnDemand(OnDemandRequest request, int expectedStatusCode) {
 
                 Response response = service.get(
                                 ApiEndpoints.REQUEST_ON_DEMAND,

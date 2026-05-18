@@ -10,6 +10,9 @@ import org.apache.logging.log4j.Logger;
 Retries failed API requests based on configured retry policy. 
 Handles transient failures like timeout or server issues. 
 Helps improve test stability in unstable environments.
+Retries failed operations like API calls, token generation, or DB actions 
+with configurable attempts and wait time, improving framework stability 
+against temporary failures.
 */
 public final class RetryExecutor {
 

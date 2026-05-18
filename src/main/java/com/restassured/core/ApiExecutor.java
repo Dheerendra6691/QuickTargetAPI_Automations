@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+
 /*
 Executes HTTP requests using RestAssured methods.
 Supports GET, POST, PUT, DELETE operations.
@@ -21,9 +22,7 @@ public final class ApiExecutor {
         public static Response get(RequestSpecification requestSpec, String endpoint,
                         ResponseSpecification responseSpec) {
 
-                LOGGER.info(
-                                "Executing GET : {}",
-                                endpoint);
+                LOGGER.info("Executing GET : {}", endpoint);
 
                 return requestSpec
                                 .when()
@@ -40,9 +39,7 @@ public final class ApiExecutor {
                         Object body,
                         ResponseSpecification responseSpec) {
 
-                LOGGER.info(
-                                "Executing POST : {}",
-                                endpoint);
+                LOGGER.info("Executing POST : {}", endpoint);
 
                 return requestSpec
                                 .body(body)

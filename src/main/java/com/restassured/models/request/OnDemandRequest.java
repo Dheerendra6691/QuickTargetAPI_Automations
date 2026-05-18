@@ -1,5 +1,11 @@
 package com.restassured.models.request;
 
+/*
+ * Immutable request POJO for On Demand API payload.
+ * Implemented using Builder Pattern for clean, readable, and flexible
+ * object creation, allowing field assignment in any order while
+ * improving maintainability, scalability, and test data management.
+ */
 public class OnDemandRequest {
 
     private final Integer request_id;

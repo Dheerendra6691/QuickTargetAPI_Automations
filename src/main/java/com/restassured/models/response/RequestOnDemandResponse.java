@@ -2,6 +2,14 @@ package com.restassured.models.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/*
+ * POJO class used to map API response data for Request On Demand.
+ * Jackson automatically converts JSON response fields into Java object fields.
+ *
+ * @JsonProperty:
+ * Used when JSON field names (snake_case) are different from Java fields
+ * (camelCase). Example: "created_at" -> createdAt.
+ */
 public class RequestOnDemandResponse {
 
     @JsonProperty("command_type")

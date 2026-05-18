@@ -2,8 +2,11 @@ package com.restassured.specifications;
 
 import static io.restassured.RestAssured.given;
 
+import com.restassured.filters.LoggingFilter;
+
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+
 /*
 Defines reusable request specifications like headers and content types.
 Standardizes request building.
@@ -17,7 +20,7 @@ public final class RequestSpecs {
     }
 
     public static RequestSpecification defaultSpec() {
-        return given().baseUri(BASE_URL).contentType(ContentType.JSON);
+        return given().filter(new LoggingFilter()).baseUri(BASE_URL).contentType(ContentType.JSON);
     }
 
     public static RequestSpecification authorized(String token) {

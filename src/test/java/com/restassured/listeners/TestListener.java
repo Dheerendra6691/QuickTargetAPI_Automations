@@ -10,99 +10,62 @@ import org.testng.ITestResult;
 
 import com.restassured.context.ScenarioContext;
 
-public class TestListener implements
-                ITestListener,
-                IExecutionListener {
+public class TestListener implements ITestListener, IExecutionListener {
 
-        private static final Logger LOGGER = LogManager.getLogger(
-                        TestListener.class);
+        private static final Logger LOGGER = LogManager.getLogger(TestListener.class);
 
         @Override
         public void onExecutionStart() {
-
-                LOGGER.info(
-                                "Automation execution started");
+                LOGGER.info("Automation execution started");
         }
 
         @Override
         public void onExecutionFinish() {
-
-                LOGGER.info(
-                                "Automation execution completed");
+                LOGGER.info("Automation execution completed");
         }
 
         @Override
-        public void onStart(
-                        ITestContext context) {
-
-                LOGGER.info(
-                                "Test class started : {}",
-                                context.getName());
+        public void onStart(ITestContext context) {
+                LOGGER.info("Test class started : {}", context.getName());
         }
 
         @Override
-        public void onFinish(
-                        ITestContext context) {
-
-                LOGGER.info(
-                                "Test class finished : {}",
-                                context.getName());
+        public void onFinish(ITestContext context) {
+                LOGGER.info("Test class finished : {}", context.getName());
         }
 
         @Override
-        public void onTestStart(
-                        ITestResult result) {
+        public void onTestStart(ITestResult result) {
 
-                String testName = result.getTestClass()
-                                .getRealClass()
-                                .getSimpleName()
+                String testName = result.getTestClass().getRealClass().getSimpleName()
                                 + "."
-                                + result.getMethod()
-                                                .getMethodName();
+                                + result.getMethod().getMethodName();
 
-                ThreadContext.put(
-                                "testName",
-                                testName);
+                ThreadContext.put("testName", testName);
 
-                LOGGER.info(
-                                "Test started");
+                LOGGER.info("Test started");
         }
 
         @Override
-        public void onTestSuccess(
-                        ITestResult result) {
-
-                LOGGER.info(
-                                "Test passed");
-
+        public void onTestSuccess(ITestResult result) {
+                LOGGER.info("Test passed");
                 clearContexts();
         }
 
         @Override
-        public void onTestFailure(
-                        ITestResult result) {
-
-                LOGGER.error(
-                                "Test failed",
-                                result.getThrowable());
-
+        public void onTestFailure(ITestResult result) {
+                LOGGER.error("Test failed", result.getThrowable());
                 clearContexts();
         }
 
         @Override
-        public void onTestSkipped(
-                        ITestResult result) {
-
-                LOGGER.warn(
-                                "Test skipped");
-
+        public void onTestSkipped(ITestResult result) {
+                LOGGER.warn("Test skipped");
                 clearContexts();
         }
 
         private void clearContexts() {
-
                 ThreadContext.clearAll();
-
                 ScenarioContext.clear();
         }
 }

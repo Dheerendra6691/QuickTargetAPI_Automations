@@ -1,53 +1,43 @@
 package com.restassured.tests;
 
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.restassured.client.AuthService;
+import com.restassured.dataproviders.AuthDataProvider;
+import com.restassured.models.request.TokenRequest;
+import com.restassured.workflows.AuthWorkflow;
 
 public class TokenApiTest {
 
-    private final AuthService authService = new AuthService();
+    private final AuthWorkflow authWorkflow = new AuthWorkflow();
 
-    @Test(description = "Verify valid token generation", groups = { "sanity", "regression"
-    })
-
+    @Test(description = "Verify valid token generation", groups = { "sanity", "regression" })
     public void shouldGenerateTokenWhenCredentialsAreValid() {
-        String token = authService.generateToken("vikas", "Vikas@123");
-        Assert.assertNotNull(token);
-        Assert.assertFalse(token.isBlank());
+
+        TokenRequest request = TokenRequest.builder()
+                .username("vikas")
+                .password("Vikas@123")
+                .build();
+
+        String token = authWorkflow.generateToken(request);
+
+        Assert.assertNotNull(token, "Generated token should not be null");
+        Assert.assertFalse(token.isBlank(), "Generated token should not be blank");
     }
 
-    @Test(groups = { "regression", "smoke" })
+    @Test(dataProvider = "invalidTokenData", dataProviderClass = AuthDataProvider.class, groups = { "smoke",
+            "regression" })
+    public void shouldFailTokenGenerationWhenCredentialsAreInvalid(TokenRequest request) {
 
-    public void shouldFailTokenGenerationWhenCredentialsValidUserAndInvalidPass() {
         try {
-            authService.generateToken("vikas", "Wrong@34");
-            Assert.fail("Token should not be generated");
-        } catch (RuntimeException e) {
-            Assert.assertTrue(true);
-        }
-    }
 
-    @DataProvider(name = "invalidTokenData")
-    public Object[][] invalidTokenData() {
-        return new Object[][] {
-                { "invalid", "Vikas@123" },
-                { "vikas", "Wrong@34" },
-                { "", "Vikas@123" },
-                { "vikas", "" },
-                { "", "" } };
-    }
+            authWorkflow.generateToken(request);
 
-    @Test(dataProvider = "invalidTokenData", description = "Verify invalid token generation", groups = {
-            "regression", "smoke" })
-    public void shouldFailTokenGenerationWhenCredentialsAreInvalid(String username, String password) {
-        try {
-            authService.generateToken(username, password);
-            Assert.fail("Token should not be generated");
-        } catch (RuntimeException e) {
-            Assert.assertTrue(true);
+            Assert.fail("Token should not be generated for invalid credentials");
+
+        } catch (RuntimeException exception) {
+
+            Assert.assertNotNull(exception.getMessage(), "Exception message should be present");
         }
     }
 }

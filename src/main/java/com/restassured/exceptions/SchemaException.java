@@ -7,15 +7,12 @@ Helps ensure response contract compliance.
 
 public class SchemaException extends RuntimeException {
 
-    public SchemaException(
-            String message) {
+    public SchemaException(String message) {
 
         super(message);
     }
 
-    public SchemaException(
-            String message,
-            Throwable cause) {
+    public SchemaException(String message, Throwable cause) {
 
         super(message, cause);
     }

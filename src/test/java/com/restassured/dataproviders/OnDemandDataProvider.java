@@ -3,6 +3,7 @@ package com.restassured.dataproviders;
 import org.testng.annotations.DataProvider;
 
 import com.restassured.models.request.OnDemandRequest;
+
 /*
 Provides test data from external sources dynamically.
 Supports data-driven API testing.
@@ -14,18 +15,19 @@ public final class OnDemandDataProvider {
     }
 
     @DataProvider(name = "positiveOnDemandData")
-    public static Object[][] positiveData() {
+    public static Object[][] positiveOnDemandData() {
 
         return new Object[][] {
                 { new OnDemandRequest.Builder().build() },
                 { new OnDemandRequest.Builder().meterNo("DL0010003").build() },
                 { new OnDemandRequest.Builder().commandType(4).build() },
-                { new OnDemandRequest.Builder().commandValue(2).build() }
+                { new OnDemandRequest.Builder().commandValue(2).build() },
+                { new OnDemandRequest.Builder().commandValue(4).meterNo("DL0010007").build() }
         };
     }
 
     @DataProvider(name = "negativeOnDemandData")
-    public static Object[][] negativeData() {
+    public static Object[][] negativeOnDemandData() {
 
         return new Object[][] {
                 { new OnDemandRequest.Builder().meterNo("979").build(), 200 },
