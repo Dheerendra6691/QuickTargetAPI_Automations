@@ -20,11 +20,20 @@ public class RequestOnDemandTest1 extends BaseTest {
 
     private final CommandWorkflow commandWorkflow = new CommandWorkflow();
 
-    @Test(dataProvider = "positiveOnDemandData", dataProviderClass = OnDemandDataProvider.class,
-
-            description = "Verify Request On Demand API", groups = { "sanity", "smoke", "regression" })
+    @Test(description = "Verify Request On Demand API", dataProvider = "positiveOnDemandData", dataProviderClass = OnDemandDataProvider.class, groups = {
+            "sanity", "smoke", "regression" })
 
     public void verifyRequestOnDemand(OnDemandRequest request) {
+
+        List<RequestOnDemandResponse> responseODR = commandWorkflow.executeOnDemand(request);
+
+        ApiAssertions.assertOnDemandResponse(responseODR);
+    }
+
+    @Test(description = "Verify Request On Demand API", dataProvider = "positiveOnDemandDataCommandType", dataProviderClass = OnDemandDataProvider.class, groups = {
+            "sanity", "smoke", "regression" })
+
+    public void verifyRequestOnDemandCommandType(OnDemandRequest request) {
 
         List<RequestOnDemandResponse> responseODR = commandWorkflow.executeOnDemand(request);
 

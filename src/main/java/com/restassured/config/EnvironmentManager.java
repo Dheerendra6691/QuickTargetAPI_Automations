@@ -8,6 +8,7 @@ Helps run the same API suite across multiple deployment stages.
 public final class EnvironmentManager {
 
     private static final String ENV_KEY = "env";
+    private static final String ENV_VARIABLE = "ENV";
     private static final String DEFAULT_ENV = "qa";
 
     private EnvironmentManager() {
@@ -18,20 +19,18 @@ public final class EnvironmentManager {
         String environment = System.getProperty(ENV_KEY);
 
         if (isBlank(environment)) {
-            environment = System.getenv("ENV");
+            environment = System.getenv(ENV_VARIABLE);
         }
 
         if (isBlank(environment)) {
             environment = DEFAULT_ENV;
         }
 
-        return environment
-                .trim()
-                .toLowerCase();
+        return environment.trim().toLowerCase();
     }
 
     public static String getConfigFile() {
-        return "config-" + getEnvironment() + ".properties";
+        return "db_" + getEnvironment() + ".properties";
     }
 
     private static boolean isBlank(String value) {

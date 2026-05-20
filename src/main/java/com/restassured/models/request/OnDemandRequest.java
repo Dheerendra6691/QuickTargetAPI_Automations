@@ -6,70 +6,87 @@ package com.restassured.models.request;
  * object creation, allowing field assignment in any order while
  * improving maintainability, scalability, and test data management.
  */
-public class OnDemandRequest {
 
-    private final Integer request_id;
-    private final String meter_no;
-    private final Integer command_type;
-    private final Object command_value;
+public final class OnDemandRequest {
+
+    private final Integer requestId;
+    private final String meterNo;
+    private final Integer commandType;
+    private final Object commandValue;
 
     private OnDemandRequest(Builder builder) {
-        this.request_id = builder.request_id;
-        this.meter_no = builder.meter_no;
-        this.command_type = builder.command_type;
-        this.command_value = builder.command_value;
+        this.requestId = builder.requestId;
+        this.meterNo = builder.meterNo;
+        this.commandType = builder.commandType;
+        this.commandValue = builder.commandValue;
     }
 
-    public Integer getRequest_id() {
-        return request_id;
+    // Getters for JSON serialization, assertions, logging, and framework
+    // compatibility.
+    public Integer getRequestId() {
+        return requestId;
     }
 
-    public String getMeter_no() {
-        return meter_no;
+    public String getMeterNo() {
+        return meterNo;
     }
 
-    public Integer getCommand_type() {
-        return command_type;
+    public Integer getCommandType() {
+        return commandType;
     }
 
-    public Object getCommand_value() {
-        return command_value;
+    public Object getCommandValue() {
+        return commandValue;
+    }
+
+    // Builder entry point
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
     public String toString() {
-        return "OnDemandRequest [request_id=" + request_id + ", meter_no=" + meter_no + ", command_type=" + command_type
-                + ", command_value=" + command_value + "]";
+        return "OnDemandRequest{" +
+                "requestId=" + requestId +
+                ", meterNo='" + meterNo + '\'' +
+                ", commandType=" + commandType +
+                ", commandValue=" + commandValue +
+                '}';
     }
 
-    // Builder class help to assign value in any order
-    public static class Builder {
+    // Builder class helps to assign values in any order.
+    public static final class Builder {
 
-        private Integer request_id;
-        private String meter_no;
-        private Integer command_type;
-        private Object command_value;
+        private Integer requestId;
+        private String meterNo;
+        private Integer commandType;
+        private Object commandValue;
 
+        private Builder() {
+        }
+
+        // Fluent setters for readable method chaining.
         public Builder requestId(Integer requestId) {
-            this.request_id = requestId;
+            this.requestId = requestId;
             return this;
         }
 
         public Builder meterNo(String meterNo) {
-            this.meter_no = meterNo;
+            this.meterNo = meterNo;
             return this;
         }
 
         public Builder commandType(Integer commandType) {
-            this.command_type = commandType;
+            this.commandType = commandType;
             return this;
         }
 
         public Builder commandValue(Object commandValue) {
-            this.command_value = commandValue;
+            this.commandValue = commandValue;
             return this;
         }
 
+        // Validation + object creation
         public OnDemandRequest build() {
             return new OnDemandRequest(this);
         }

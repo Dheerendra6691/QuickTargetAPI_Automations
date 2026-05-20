@@ -20,9 +20,7 @@ public final class TokenManager {
 
                     AuthService authService = AuthFactory.getInstance();
 
-                    token = authService.generateToken(
-                            "vikas",
-                            "Vikas@123");
+                    token = authService.generateToken("vikas", "Vikas@123");
                 }
             }
         }

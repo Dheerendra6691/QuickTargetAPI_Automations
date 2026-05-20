@@ -71,12 +71,12 @@ public class RequestOnDemandTest extends BaseTest {
                                 // OnDemandRequest.Builder().requestId(20001).meterNo("DL0010001").commandType(2)
                                 // .commandValue(7)
                                 // .build() },
-                                { new OnDemandRequest.Builder().build() },
-                                // { new OnDemandRequest.Builder().requestId(20003).build() },
-                                { new OnDemandRequest.Builder().meterNo("DL0010003").build() },
-                                { new OnDemandRequest.Builder().commandType(4).build() },
-                                { new OnDemandRequest.Builder().commandValue(2).build() },
-                                { new OnDemandRequest.Builder().commandValue(4).meterNo("DL0010007").build()
+                                { OnDemandRequest.builder().build() },
+                                // { OnDemandRequest.builder().requestId(20003).build() },
+                                { OnDemandRequest.builder().meterNo("DL0010003").build() },
+                                { OnDemandRequest.builder().commandType(4).build() },
+                                { OnDemandRequest.builder().commandValue(2).build() },
+                                { OnDemandRequest.builder().commandValue(4).meterNo("DL0010007").build()
                                 }
                 };
         }
@@ -84,11 +84,11 @@ public class RequestOnDemandTest extends BaseTest {
         @DataProvider(name = "negativeData")
         public Object[][] negativeData() {
                 return new Object[][] {
-                                { new OnDemandRequest.Builder().meterNo("979").build(), 200 },
-                                { new OnDemandRequest.Builder().commandType(8768).build(), 200 },
-                                { new OnDemandRequest.Builder().commandValue(9696).build(), 200 },
-                                { new OnDemandRequest.Builder().requestId(9687).build(), 404 },
-                                { new OnDemandRequest.Builder().requestId(-3).build(), 404 }
+                                { OnDemandRequest.builder().meterNo("979").build(), 200 },
+                                { OnDemandRequest.builder().commandType(8768).build(), 200 },
+                                { OnDemandRequest.builder().commandValue(9696).build(), 200 },
+                                { OnDemandRequest.builder().requestId(9687).build(), 404 },
+                                { OnDemandRequest.builder().requestId(-3).build(), 404 }
                 };
         }
 }

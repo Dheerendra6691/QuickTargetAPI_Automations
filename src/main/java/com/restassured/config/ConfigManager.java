@@ -1,12 +1,18 @@
 package com.restassured.config;
 
 import java.util.Properties;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /*
 Loads framework configuration values from property files.
 Provides environment-specific settings like URLs, credentials, and timeouts.
 Helps execute tests seamlessly across QA, UAT, and production environments.
 */
 public final class ConfigManager {
+
+    private static final Logger LOGGER = LogManager.getLogger(ConfigManager.class);
 
     private static volatile Properties properties;
 
@@ -20,18 +26,24 @@ public final class ConfigManager {
             synchronized (ConfigManager.class) {
 
                 if (properties == null) {
-
-                    String fileName = EnvironmentManager.getConfigFile();
-
-                    properties = PropertyLoader.load(fileName);
-
-                    overrideWithSystemProperties();
-                    overrideWithEnvironmentVariables();
+                    loadProperties();
                 }
             }
         }
 
         return properties;
+    }
+
+    private static void loadProperties() {
+
+        String fileName = EnvironmentManager.getConfigFile();
+
+        properties = PropertyLoader.load(fileName);
+
+        overrideWithSystemProperties();
+        overrideWithEnvironmentVariables();
+
+        LOGGER.info("Active Environment : {}", EnvironmentManager.getEnvironment());
     }
 
     private static void overrideWithSystemProperties() {
@@ -40,66 +52,53 @@ public final class ConfigManager {
 
         for (String key : systemProperties.stringPropertyNames()) {
 
-            if (systemProperties.getProperty(key) != null) {
+            String value = systemProperties.getProperty(key);
 
-                properties.setProperty(
-                        key,
-                        systemProperties.getProperty(key));
+            if (value != null) {
+                properties.setProperty(key, value);
             }
         }
     }
 
     private static void overrideWithEnvironmentVariables() {
 
-        System.getenv()
-                .forEach((key, value) -> properties.setProperty(
-                        key.toLowerCase(),
-                        value));
+        System.getenv().forEach((key, value) -> {
+
+            if (value != null) {
+                properties.setProperty(key.toLowerCase(), value);
+            }
+        });
     }
 
     public static String get(String key) {
 
         String value = getProperties().getProperty(key);
 
-        if (value == null) {
-
-            throw new RuntimeException(
-                    "Missing config key : " + key);
+        if (value == null || value.trim().isEmpty()) {
+            throw new RuntimeException("Missing configuration key : " + key);
         }
 
         return value.trim();
     }
 
-    public static String get(String key,
-            String defaultValue) {
-
-        return getProperties()
-                .getProperty(key, defaultValue)
-                .trim();
+    public static String get(String key, String defaultValue) {
+        return getProperties().getProperty(key, defaultValue).trim();
     }
 
     public static int getInt(String key) {
-
-        return Integer.parseInt(
-                get(key));
+        return Integer.parseInt(get(key));
     }
 
     public static long getLong(String key) {
-
-        return Long.parseLong(
-                get(key));
+        return Long.parseLong(get(key));
     }
 
     public static double getDouble(String key) {
-
-        return Double.parseDouble(
-                get(key));
+        return Double.parseDouble(get(key));
     }
 
     public static boolean getBoolean(String key) {
-
-        return Boolean.parseBoolean(
-                get(key));
+        return Boolean.parseBoolean(get(key));
     }
 
     public static void reload() {
@@ -107,5 +106,7 @@ public final class ConfigManager {
         synchronized (ConfigManager.class) {
             properties = null;
         }
+
+        LOGGER.info("Configuration cache cleared");
     }
 }

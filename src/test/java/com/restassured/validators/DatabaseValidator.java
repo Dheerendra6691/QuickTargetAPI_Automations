@@ -1,40 +1,60 @@
 package com.restassured.validators;
 
-import java.sql.ResultSet;
+import java.util.List;
+import java.util.Map;
 
 import org.testng.Assert;
 
-import com.restassured.context.ScenarioContext;
 import com.restassured.db.QueryExecutor;
+import com.restassured.models.response.RequestOnDemandResponse;
+import com.restassured.utils.FileUtils;
 
-/* 
-Validates API response against backend database records. 
-Ensures data consistency after API execution. 
-Helps perform end-to-end verification.
-*/
 public final class DatabaseValidator {
+
+    private static final String QUERY = FileUtils.readFile(
+            "src/test/resources/sql/get_hes_command_request.sql");
 
     private DatabaseValidator() {
     }
 
-    public static void validateCommand() {
-        try {
-            Integer requestId = ScenarioContext.get("requestId");
+    public static void validateCommand(
+            RequestOnDemandResponse response) {
 
-            Assert.assertNotNull(requestId, "Scenario requestId should not be null");
+        List<Map<String, Object>> dbResults = QueryExecutor.executeQuery(
+                QUERY,
+                response.getCommandType());
 
-            String query = "select request_id from commands where request_id = " + requestId;
+        boolean recordFound = false;
 
-            ResultSet resultSet = QueryExecutor.execute(query);
+        for (Map<String, Object> dbData : dbResults) {
 
-            Assert.assertTrue(resultSet.next(), "Command not found in database");
+            String dbMeterNo = dbData.get("meter_no").toString();
 
-            Assert.assertEquals(resultSet.getInt("request_id"),
-                    requestId.intValue(),
-                    "Database requestId mismatch");
+            int dbRequestId = ((Number) dbData.get("request_id")).intValue();
 
-        } catch (Exception exception) {
-            throw new RuntimeException("Database validation failed", exception);
+            if (dbMeterNo.equals(response.getMeterNo())
+                    && dbRequestId == response.getRequestId()) {
+
+                recordFound = true;
+
+                Assert.assertEquals(
+                        ((Number) dbData.get("command_type")).intValue(),
+                        response.getCommandType());
+
+                Assert.assertEquals(
+                        dbData.get("command_value").toString(),
+                        response.getCommandValue());
+
+                Assert.assertEquals(
+                        dbData.get("status").toString(),
+                        response.getStatus());
+
+                break;
+            }
         }
+
+        Assert.assertTrue(
+                recordFound,
+                "Matching DB record not found");
     }
 }

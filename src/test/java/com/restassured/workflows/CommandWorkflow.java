@@ -48,10 +48,12 @@ public class CommandWorkflow {
                         ScenarioContext.put("meterNo", responseData.getMeterNo());
                         ScenarioContext.put("status", responseData.getStatus());
 
+                        // DB Validation
                         if (ConfigManager.getBoolean("db.validation.enabled")) {
 
-                                DatabaseValidator.validateCommand();
+                                DatabaseValidator.validateCommand(responseData);
                         }
+
                 }
 
                 return responseODR;
