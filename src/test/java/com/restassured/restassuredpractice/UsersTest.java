@@ -50,8 +50,7 @@ public class UsersTest {
         assertEquals(userPayload.getEmail(), email);
         // Response body validation
         assertEquals(response.getStatusCode(), 201);
-        assertEquals(
-                response.jsonPath().getString("email"),
+        assertEquals(response.jsonPath().getString("email"),
                 userPayload.getEmail());
 
     }
@@ -68,6 +67,8 @@ public class UsersTest {
                 .build();
         Response response = BaseClient.postRequestWithRequestSpecs("users", userPayload);
 
+        System.out.println(response.asPrettyString());
+
         // Builder object validation using getters [Did Builder store "active"
         // correctly?]
         assertEquals(userPayload.getEmail(), email);
@@ -79,4 +80,30 @@ public class UsersTest {
 
     }
 
+    @Test(enabled = true)
+    public void testUsersCreationsRequestWithRequestAndReponseSpecs() {
+        String email = "piyush" + System.currentTimeMillis() + "@gmail.com";
+        String name = "piyush" + System.currentTimeMillis();
+        UserRequest userPayload = UserRequest.builder()
+                .name(name)
+                .email(email)
+                .gender("male")
+                .status("active")
+                .build();
+        Response response = BaseClient.postRequestWithRequestAndReponseSpecs("users", userPayload);
+
+        System.out.println(response.asPrettyString());
+
+        // Builder object validation using getters [Did Builder store "active"
+        // correctly?]
+        assertEquals(userPayload.getEmail(), email);
+
+        assertEquals(
+                response.jsonPath().getString("email"),
+                userPayload.getEmail());
+
+    }
+
 }
+
+

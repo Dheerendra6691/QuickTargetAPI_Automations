@@ -8,7 +8,6 @@
 
     <listeners>
         <listener class-name="com.restassured.listeners.TestListener"/>
-        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
     </listeners>
 
     <test name="All_Tests">

@@ -52,29 +52,21 @@ public class ExtentManager {
         extentReports.setSystemInfo("OS Version", System.getProperty("os.version"));
         extentReports.setSystemInfo("User", System.getProperty("user.name"));
         extentReports.setSystemInfo("Execution Time", new Date().toString());
-        extentReports.setSystemInfo("Thread Count", String.valueOf(Runtime.getRuntime().availableProcessors()));
+        extentReports.setSystemInfo("Available Processors", String.valueOf(Runtime.getRuntime().availableProcessors()));
     }
 
     public static void openReport() {
         try {
-            if (reportPath == null) {
-                System.err.println("Report path is null. Ensure the execution has initialized the report.");
-                return;
-            }
+            if (reportPath == null) return;
 
             File reportFile = new File(reportPath);
-
-            // Added check for headless environments (CI/CD pipelines) to prevent runtime
-            // crashes
             if (reportFile.exists() && Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().browse(reportFile.toURI());
             } else if (!Desktop.isDesktopSupported()) {
-                System.out.println("Desktop is not supported (Headless Environment). Report path: " + reportPath);
-            } else {
-                System.err.println("Extent Report file does not exist at path: " + reportPath);
+                System.out.println("[INFO] Headless Execution Environment. Report located at: " + reportPath);
             }
         } catch (Exception exception) {
-            System.err.println("Exception occurred while trying to auto-open the Extent Report:");
+            System.err.println("[ERROR] Failed to auto-open Extent Report.");
             exception.printStackTrace();
         }
     }

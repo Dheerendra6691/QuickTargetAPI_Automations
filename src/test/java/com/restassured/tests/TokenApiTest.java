@@ -13,7 +13,7 @@ public class TokenApiTest {
 
     @Test(description = "Verify valid token generation", groups = { "sanity", "regression" })
     public void shouldGenerateTokenWhenCredentialsAreValid() {
-
+        // Hard coded
         TokenRequest request = TokenRequest.builder()
                 .username("vikas")
                 .password("Vikas@123")

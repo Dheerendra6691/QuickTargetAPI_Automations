@@ -29,16 +29,18 @@ public final class QueryExecutor {
         List<Map<String, Object>> results = new ArrayList<>();
 
         LOGGER.info("Executing Query : {}", query);
-
+        // Connection is used to communicate with database.
         try (Connection connection = DatabaseManager.getConnection();
+                // PreparedStatement is used to execute parameterized SQL queries safely.
                 PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             for (int i = 0; i < parameters.length; i++) {
                 preparedStatement.setObject(i + 1, parameters[i]);
             }
 
+            // ResultSet stores data returned from database query.
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
+                // ResultSetMetaData contains information about query columns.
                 ResultSetMetaData metaData = resultSet.getMetaData();
 
                 int columnCount = metaData.getColumnCount();
